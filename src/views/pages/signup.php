@@ -13,18 +13,31 @@
     </div>
 </header>
 <section class="container main">
-    <form method="POST" action="<?=$base?>/login">
+    <form method="POST" action="<?=$base?>/cadastro">
         <?php if ($flash):?>
             <div class="flash"><?=$flash?></div>
         <?php endif; ?>
-        <input placeholder="Digite seu e-mail" class="input" type="email" name="email" />
+        <input placeholder="Digite o seu nome completo*" class="input" type="text" name="name" />
 
-        <input placeholder="Digite sua senha" class="input" type="password" name="password" />
+        <input placeholder="Digite seu e-mail*" class="input" type="email" name="email" />
 
-        <input class="button" type="submit" value="Acessar o sistema" />
+        <input placeholder="Digite uma senha*" class="input" type="password" name="password" />
 
-        <a href="<?=$base?>/cadastro">Ainda não tem conta? Cadastre-se</a>
+        <input placeholder="Informe a sua data de nascimento*" class="input" type="text" name="birthdate" id="birthdate" />
+
+        <input class="button" type="submit" value="Fazer o cadastro" />
+
+        <a href="<?=$base?>/login">Já tem uma conta? Faça o login!</a>
     </form>
-</section> 
+</section>
+<script src="https://unpkg.com/imask"></script>
+<script>
+    IMask(
+        document.getElementById('birthdate'),
+        {
+            mask: '00/00/0000'
+        }
+    )
+</script>
 </body>
 </html>

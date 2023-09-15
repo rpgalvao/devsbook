@@ -65,16 +65,16 @@
     font-size:15px;
 }
 .like-btn {
-    background-image: url('heart-off.png');
+    background-image: url('../images/heart-off.png');
     color:#5F7D95;
 }
 .like-btn.on {
-    background-image: url('heart-on.png');
+    background-image: url('../images/heart-on.png');
     color:#FB5252;
 }
 
 .msg-btn {
-    background-image: url('comment.png');
+    background-image: url('../images/comment.png');
     color:#5F7D95;
 }
 

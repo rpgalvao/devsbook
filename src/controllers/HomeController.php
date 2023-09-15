@@ -10,13 +10,15 @@ class HomeController extends Controller {
 
     public function __construct()
     {
-        $loggedUser = LoginHandler::checkLogin();
-        if ($loggedUser === false) {
+        $this->loggedUser = LoginHandler::checkLogin();
+        if ($this->loggedUser === false) {
             $this->redirect('/login');
         }
     }
 
     public function index() {
-        $this->render('home',);
+        $this->render('home', [
+            'loggedUser' => $this->loggedUser
+        ]);
     }
 }

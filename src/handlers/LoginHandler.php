@@ -13,8 +13,9 @@ class LoginHandler {
                 $loggedUser = new User();
 
                 $loggedUser->id = $data['id'];
-                $loggedUser->email = $data['email'];
                 $loggedUser->name = $data['name'];
+                $loggedUser->birthdate = $data['birthdate'];
+                $loggedUser->avatar = $data['avatar'];
 
                 return $loggedUser;
             }
@@ -25,13 +26,33 @@ class LoginHandler {
 
     public static function verifyLogin($email, $password)
     {
-        $user = User::select()->where('email', $email)->one();
-        if (password_verify($password, $user['password'])) {
+        $user = User::select()->where('email', $email)->where('password', $password)->one();
+        if ($user) {
             $token = md5(time().rand(0, 9999).time());
             User::update()->set('token', $token)->where('email', $email)->execute();
             return $token;
         } else {
             return false;
         }
+    }
+
+    public static function emailExists($email)
+    {
+        $user = User::select()->where('email', $email)->one();
+        return (bool) $user;
+    }
+
+    public static function addUser($name, $email, $password, $birthdate)
+    {
+        //$pass = password_hash($password, PASSWORD_DEFAULT);
+        $token = md5(time().rand(0, 9999).time());
+        User::insert([
+            'name' => $name,
+            'email' => $email,
+            'password' => md5($password),
+            'birthdate' => $birthdate,
+            'token' => $token
+        ])->execute();
+        return $token;
     }
 }
