@@ -25,6 +25,6 @@
 
         <a href="<?=$base?>/cadastro">Ainda não tem conta? Cadastre-se</a>
     </form>
-</section> 
+</section>
 </body>
 </html>

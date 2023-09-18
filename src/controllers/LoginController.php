@@ -2,7 +2,7 @@
 namespace src\controllers;
 
 use \core\Controller;
-use src\handlers\LoginHandler;
+use src\handlers\UserHandler;
 
 class LoginController extends Controller {
 
@@ -21,10 +21,11 @@ class LoginController extends Controller {
     public function login()
     {
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $password = md5(filter_input(INPUT_POST, 'password'));
+//        $password = md5(filter_input(INPUT_POST, 'password'));
+        $password = filter_input(INPUT_POST, 'password');
 
         if ($email && $password) {
-            $token = LoginHandler::verifyLogin($email, $password);
+            $token = UserHandler::verifyLogin($email, $password);
             if ($token) {
                 $_SESSION['token'] = $token;
                 $this->redirect('/');
@@ -55,7 +56,8 @@ class LoginController extends Controller {
     {
         $name = filter_input(INPUT_POST, 'name');
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $password = md5(filter_input(INPUT_POST, 'password'));
+        //$password = md5(filter_input(INPUT_POST, 'password'));
+        $password = filter_input(INPUT_POST, 'password');
         $birthdate = filter_input(INPUT_POST, 'birthdate');
 
         if ($name && $email && $password && $birthdate) {
@@ -70,8 +72,8 @@ class LoginController extends Controller {
                 $this->redirect('/cadastro');
             }
 
-            if (LoginHandler::emailExists($email) === false) {
-                $token = LoginHandler::addUser($name, $email, $password, $birthdate);
+            if (UserHandler::emailExists($email) === false) {
+                $token = UserHandler::addUser($name, $email, $password, $birthdate);
                 $_SESSION['token'] = $token;
                 $this->redirect('/');
             } else {
