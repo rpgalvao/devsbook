@@ -19,7 +19,7 @@ class PostHandler {
         }
     }
 
-    public static function getHomeFeed($idUser, $page)
+    public static function getHomeFeed($idUser, $page): array
     {
         //1. Pegar a lista de usuários que EU sigo
         $userList = UserRelation::select()->where('user_from', $idUser)->get();
@@ -72,5 +72,22 @@ class PostHandler {
             'totalPages' => $totalPages,
             'currentPage' => $page
         ];
+    }
+
+    public static function getPhotosFrom($idUser): array
+    {
+        $photosData = Post::select()->where('id_user', $idUser)->where('type', 'photo')->get();
+        $photos = [];
+        foreach ($photosData as $photo) {
+            $newPost = new Post();
+            $newPost->id = $photo['id'];
+            $newPost->type = $photo['type'];
+            $newPost->created_at = $photo['created_at'];
+            $newPost->body = $photo['body'];
+
+            $photos[] = $newPost;
+        }
+
+        return $photos;
     }
 }

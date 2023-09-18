@@ -1,6 +1,7 @@
 <?php
 namespace src\handlers;
 use \src\models\User;
+use src\models\UserRelation;
 
 class UserHandler {
 
@@ -64,7 +65,7 @@ class UserHandler {
         return $token;
     }
 
-    public static function getUser($id)
+    public static function getUser($id, $full = false)
     {
         $data = User::select()->where('id', $id)->one();
         if ($data) {
@@ -76,6 +77,39 @@ class UserHandler {
             $user->work = $data['work'];
             $user->avatar = $data['avatar'];
             $user->cover = $data['cover'];
+
+            if ($full) {
+                $user->followers = [];
+                $user->followings = [];
+                $user->photos = [];
+
+                //Pegar os followers
+                $followers = UserRelation::select()->where('user_to', $id)->get();
+                foreach ($followers as $follower) {
+                    $newData = User::select()->where('id', $follower['user_from'])->one();
+                    $newUser = new User();
+                    $newUser->id = $newData['id'];
+                    $newUser->name = $newData['name'];
+                    $newUser->avatar = $newData['avatar'];
+
+                    $user->followers[] = $newUser;
+                }
+
+                //Pegar os followings
+                $followings = UserRelation::select()->where('user_from', $id)->get();
+                foreach ($followings as $following) {
+                    $newData = User::select()->where('id', $following['user_to'])->one();
+                    $newUser = new User();
+                    $newUser->id = $newData['id'];
+                    $newUser->name = $newData['name'];
+                    $newUser->avatar = $newData['avatar'];
+
+                    $user->followings[] = $newUser;
+                }
+
+                //Pegar as photos
+                $user->photos = PostHandler::getPhotosFrom($id);
+            }
 
             return $user;
         } else {

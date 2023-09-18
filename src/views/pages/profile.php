@@ -16,15 +16,15 @@
                         </div>
                         <div class="profile-info-data row">
                             <div class="profile-info-item m-width-20">
-                                <div class="profile-info-item-n">129</div>
+                                <div class="profile-info-item-n"><?=count($user->followers)?></div>
                                 <div class="profile-info-item-s">Seguidores</div>
                             </div>
                             <div class="profile-info-item m-width-20">
-                                <div class="profile-info-item-n">363</div>
+                                <div class="profile-info-item-n"><?=count($user->followings)?></div>
                                 <div class="profile-info-item-s">Seguindo</div>
                             </div>
                             <div class="profile-info-item m-width-20">
-                                <div class="profile-info-item-n">12</div>
+                                <div class="profile-info-item-n"><?=count($user->photos)?></div>
                                 <div class="profile-info-item-s">Fotos</div>
                             </div>
                         </div>
@@ -40,7 +40,7 @@
 
                         <div class="user-info-mini">
                             <img src="<?=$base?>/assets/images/calendar.png" />
-                            <?=date('d/m/Y', strtotime($user->birthdate));?> (90 anos)
+                            <?=date('d/m/Y', strtotime($user->birthdate));?> (<?=$user->ageYears?> anos)
                         </div>
                         <?php if (!empty($user->city)): ?>
                             <div class="user-info-mini">
@@ -63,7 +63,7 @@
                     <div class="box-header m-10">
                         <div class="box-header-text">
                             Seguindo
-                            <span>(363)</span>
+                            <span>(<?=count($user->followings)?>)</span>
                         </div>
                         <div class="box-header-buttons">
                             <a href="">ver todos</a>
@@ -71,82 +71,20 @@
                     </div>
                     <div class="box-body friend-list">
 
-                        <div class="friend-icon">
-                            <a href="">
-                                <div class="friend-icon-avatar">
-                                    <img src="../public/media/avatars/avatar.jpg" />
+                        <?php for ($q=0;$q<9;$q++): ?>
+                            <?php if (isset($user->followings[$q])): ?>
+                                <div class="friend-icon">
+                                    <a href="<?=$base?>/perfil/<?=$user->followings[$q]->id?>">
+                                        <div class="friend-icon-avatar">
+                                            <img src="<?=$base?>/media/avatars/<?=$user->followings[$q]->avatar?>" />
+                                        </div>
+                                        <div class="friend-icon-name">
+                                            <?=$user->followings[$q]->name?>
+                                        </div>
+                                    </a>
                                 </div>
-                                <div class="friend-icon-name">
-                                    Bonieky
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="friend-icon">
-                            <a href="">
-                                <div class="friend-icon-avatar">
-                                    <img src="../public/media/avatars/avatar.jpg" />
-                                </div>
-                                <div class="friend-icon-name">
-                                    Bonieky
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="friend-icon">
-                            <a href="">
-                                <div class="friend-icon-avatar">
-                                    <img src="../public/media/avatars/avatar.jpg" />
-                                </div>
-                                <div class="friend-icon-name">
-                                    Bonieky
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="friend-icon">
-                            <a href="">
-                                <div class="friend-icon-avatar">
-                                    <img src="../public/media/avatars/avatar.jpg" />
-                                </div>
-                                <div class="friend-icon-name">
-                                    Bonieky
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="friend-icon">
-                            <a href="">
-                                <div class="friend-icon-avatar">
-                                    <img src="../public/media/avatars/avatar.jpg" />
-                                </div>
-                                <div class="friend-icon-name">
-                                    Bonieky
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="friend-icon">
-                            <a href="">
-                                <div class="friend-icon-avatar">
-                                    <img src="../public/media/avatars/avatar.jpg" />
-                                </div>
-                                <div class="friend-icon-name">
-                                    Bonieky
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="friend-icon">
-                            <a href="">
-                                <div class="friend-icon-avatar">
-                                    <img src="../public/media/avatars/avatar.jpg" />
-                                </div>
-                                <div class="friend-icon-name">
-                                    Bonieky
-                                </div>
-                            </a>
-                        </div>
+                            <?php endif; ?>
+                        <?php endfor; ?>
 
                     </div>
                 </div>
@@ -158,7 +96,7 @@
                     <div class="box-header m-10">
                         <div class="box-header-text">
                             Fotos
-                            <span>(12)</span>
+                            <span>(<?=count($user->photos)?>)</span>
                         </div>
                         <div class="box-header-buttons">
                             <a href="">ver todos</a>
@@ -166,41 +104,18 @@
                     </div>
                     <div class="box-body row m-20">
 
-                        <div class="user-photo-item">
-                            <a href="#modal-1" rel="modal:open">
-                                <img src="../public/media/uploads/1.jpg" />
-                            </a>
-                            <div id="modal-1" style="display:none">
-                                <img src="../public/media/uploads/1.jpg" />
-                            </div>
-                        </div>
-
-                        <div class="user-photo-item">
-                            <a href="#modal-2" rel="modal:open">
-                                <img src="../public/media/uploads/1.jpg" />
-                            </a>
-                            <div id="modal-2" style="display:none">
-                                <img src="../public/media/uploads/1.jpg" />
-                            </div>
-                        </div>
-
-                        <div class="user-photo-item">
-                            <a href="#modal-3" rel="modal:open">
-                                <img src="../public/media/uploads/1.jpg" />
-                            </a>
-                            <div id="modal-3" style="display:none">
-                                <img src="../public/media/uploads/1.jpg" />
-                            </div>
-                        </div>
-
-                        <div class="user-photo-item">
-                            <a href="#modal-4" rel="modal:open">
-                                <img src="../public/media/uploads/1.jpg" />
-                            </a>
-                            <div id="modal-4" style="display:none">
-                                <img src="../public/media/uploads/1.jpg" />
-                            </div>
-                        </div>
+                        <?php for ($q = 0; $q < 4; $q++): ?>
+                            <?php if (isset($user->photos[$q])): ?>
+                                <div class="user-photo-item">
+                                    <a href="#modal-<?=$user->photos[$q]->id?>" rel="modal:open">
+                                        <img src="<?=$base?>/media/uploads/<?=$user->photos[$q]->body?>" />
+                                    </a>
+                                    <div id="modal-<?=$user->photos[$q]->id?>" style="display:none">
+                                        <img src="<?=$base?>/media/uploads/<?=$user->photos[$q]->body?>" />
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                        <?php endfor; ?>
 
                     </div>
                 </div>
