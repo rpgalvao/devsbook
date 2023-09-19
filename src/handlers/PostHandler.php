@@ -19,25 +19,8 @@ class PostHandler {
         }
     }
 
-    public static function getHomeFeed($idUser, $page): array
+    public static function _postListToObject($postList, $loggedUserId)
     {
-        //1. Pegar a lista de usuários que EU sigo
-        $userList = UserRelation::select()->where('user_from', $idUser)->get();
-        $users = [];
-        foreach ($userList as $userItem) {
-            $users[] = $userItem['user_to'];
-        }
-        $users[] = $idUser;
-
-        //2. Pegar os posts desses usuários que eu sigo em ordem cronológica e com a quantidade de posts por página
-        $perPage = 2;
-        $postList = Post::select()->where('id_user', 'in', $users)->orderBy('created_at', 'desc')->page($page, $perPage)->get();
-
-        //2.1 Pegar o total de páginas para fazer a paginação
-        $totalPosts = Post::select()->where('id_user', 'in', $users)->count();
-        $totalPages = ceil($totalPosts/$perPage);
-
-        //3. Transformar em objetos esses posts
         $posts =[];
         foreach ($postList as $postItem) {
             $newPost = new Post();
@@ -46,7 +29,7 @@ class PostHandler {
             $newPost->created_at = $postItem['created_at'];
             $newPost->body = $postItem['body'];
             $newPost->mine = false;
-            if ($postItem['id_user'] == $idUser) {
+            if ($postItem['id_user'] == $loggedUserId) {
                 $newPost->mine = true;
             }
 
@@ -67,6 +50,48 @@ class PostHandler {
             $posts[] = $newPost;
         }
 
+        return $posts;
+    }
+
+    public static function getUserFeed($idUser, $page, $loggedUserId)
+    {
+        $perPage = 2;
+        $postList = Post::select()->where('id_user', $idUser)->orderBy('created_at', 'desc')->page($page, $perPage)->get();
+
+        //2.1 Pegar o total de páginas para fazer a paginação
+        $totalPosts = Post::select()->where('id_user', $idUser)->count();
+        $totalPages = ceil($totalPosts/$perPage);
+
+        //3. Transformar em objetos esses posts
+        $posts = self::_postListToObject($postList, $loggedUserId);
+
+        return [
+            'posts' => $posts,
+            'totalPages' => $totalPages,
+            'currentPage' => $page
+        ];
+    }
+
+    public static function getHomeFeed($idUser, $page): array
+    {
+        //1. Pegar a lista de usuários que EU sigo
+        $userList = UserRelation::select()->where('user_from', $idUser)->get();
+        $users = [];
+        foreach ($userList as $userItem) {
+            $users[] = $userItem['user_to'];
+        }
+        $users[] = $idUser;
+
+        //2. Pegar os posts desses usuários que eu sigo em ordem cronológica e com a quantidade de posts por página
+        $perPage = 2;
+        $postList = Post::select()->where('id_user', 'in', $users)->orderBy('created_at', 'desc')->page($page, $perPage)->get();
+
+        //2.1 Pegar o total de páginas para fazer a paginação
+        $totalPosts = Post::select()->where('id_user', 'in', $users)->count();
+        $totalPages = ceil($totalPosts/$perPage);
+
+        //3. Transformar em objetos esses posts
+        $posts = self::_postListToObject($postList, $idUser);
         return [
             'posts' => $posts,
             'totalPages' => $totalPages,

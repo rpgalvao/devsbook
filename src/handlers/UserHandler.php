@@ -116,4 +116,27 @@ class UserHandler {
             return false;
         }
     }
+
+    public static function isFollowing($from, $to)
+    {
+        $data = UserRelation::select()->where('user_from', $from)->where('user_to', $to)->one();
+//        if (count($data) > 0) {
+//            $data = true;
+//        }
+//        $data = false;
+        return (bool) $data;
+    }
+
+    public static function follow($from, $to)
+    {
+        UserRelation::insert([
+            'user_from' => $from,
+            'user_to' => $to
+        ])->execute();
+    }
+
+    public static function unfollow($from, $to)
+    {
+        UserRelation::delete()->where('user_from', $from)->where('user_to', $to)->execute();
+    }
 }
