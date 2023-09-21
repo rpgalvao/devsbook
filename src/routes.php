@@ -20,7 +20,5 @@ $router->get('/fotos', 'ProfileController@photos');
 $router->get('/pesquisa', 'SearchController@index');
 $router->get('/config', 'ConfigController@index');
 $router->post('/config', 'ConfigController@updateUser');
-
-//$router->get('/amigos');
-//$router->get('/fotos');
-
+$router->get('/ajax/like/{id}', 'AjaxController@like');
+$router->post('/ajax/comment', 'AjaxController@comments');

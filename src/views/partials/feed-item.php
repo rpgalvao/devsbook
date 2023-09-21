@@ -1,11 +1,12 @@
-<div class="box feed-item">
+<?php //var_dump($feedItem->comments); die(); ?>
+<div class="box feed-item" data-id="<?=$feedItem->id?>">
     <div class="box-body">
         <div class="feed-item-head row mt-20 m-width-20">
             <div class="feed-item-head-photo">
-                <a href=""><img src="<?=$base?>/media/avatars/<?=$feedItem->user->avatar?>" /></a>
+                <a href="<?=$base?>/perfil/<?=$feedItem->user->id?>"><img src="<?=$base?>/media/avatars/<?=$feedItem->user->avatar?>" /></a>
             </div>
             <div class="feed-item-head-info">
-                <a href=""><span class="fidi-name"><?=$feedItem->user->name?></span></a>
+                <a href="<?=$base?>/perfil/<?=$feedItem->user->id?>"><span class="fidi-name"><?=$feedItem->user->name?></span></a>
                 <span class="fidi-action"><?php
                         switch ($feedItem->type) {
                             case 'text':
@@ -27,24 +28,27 @@
             <?=nl2br($feedItem->body)?>
         </div>
         <div class="feed-item-buttons row mt-20 m-width-20">
-            <div class="like-btn on"><?=$feedItem->likes?></div>
+            <div class="like-btn <?=($feedItem->liked ? 'on' : '');?>"><?=$feedItem->likeCount?></div>
             <div class="msg-btn"><?=count($feedItem->comments)?></div>
         </div>
         <div class="feed-item-comments">
-
-            <!--<div class="fic-item row m-height-10 m-width-20">
-                <div class="fic-item-photo">
-                    <a href=""><img src="<?=$base?>/media/avatars/avatar.jpg" /></a>
-                </div>
-                <div class="fic-item-info">
-                    <a href="">Bonieky Lacerda</a>
-                    Comentando no meu próprio post
-                </div>
-            </div>-->
+            <div class="feed-item-comments-area">
+                <?php foreach ($feedItem->comments as $item): ?>
+                    <div class="fic-item row m-height-10 m-width-20">
+                        <div class="fic-item-photo">
+                            <a href="<?=$base?>/perfil/<?=$item['user']['id']?>"><img src="<?=$base?>/media/avatars/<?=$item['user']['avatar']?>" /></a>
+                        </div>
+                        <div class="fic-item-info">
+                            <a href="<?=$base?>/perfil/<?=$item['user']['id']?>"><?=$item['user']['name']?></a>
+                            <?=$item['body']?>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
 
             <div class="fic-answer row m-height-10 m-width-20">
                 <div class="fic-item-photo">
-                    <a href=""><img src="<?=$base?>/media/avatars/<?=$loggedUser->avatar?>" /></a>
+                    <a href="<?=$base?>/perfil/<?=$loggedUser->id?>"><img src="<?=$base?>/media/avatars/<?=$loggedUser->avatar?>" /></a>
                 </div>
                 <input type="text" class="fic-item-field" placeholder="Escreva um comentário" />
             </div>

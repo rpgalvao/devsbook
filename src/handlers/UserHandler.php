@@ -159,7 +159,7 @@ class UserHandler {
         return $users;
     }
 
-    public static function updateUser($id, $name, $birthdate, $email, $city, $work, $password)
+/*    public static function updateUser($id, $name, $birthdate, $email, $city, $work, $password)
     {
         User::update()->set([
             'name' => $name,
@@ -173,5 +173,24 @@ class UserHandler {
             $pass = password_hash($password, PASSWORD_DEFAULT);
             User::update()->set('password', $pass)->where('id', $id)->execute();
         }
+    } */
+
+    public static function updateUser($fields, $idUser) {
+        if(count($fields) > 0) {
+
+            $update = User::update();
+
+            foreach($fields as $fieldName => $fieldValue) {
+                if($fieldName == 'password') {
+                    $fieldValue = password_hash($fieldValue, PASSWORD_DEFAULT);
+                }
+
+                $update->set($fieldName, $fieldValue);
+            }
+
+            $update->where('id', $idUser)->execute();
+
+        }
     }
+
 }

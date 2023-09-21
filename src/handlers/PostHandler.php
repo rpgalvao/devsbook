@@ -1,6 +1,8 @@
 <?php
 namespace src\handlers;
 use \src\models\Post;
+use src\models\PostComment;
+use src\models\PostLike;
 use src\models\User;
 use src\models\UserRelation;
 
@@ -41,16 +43,57 @@ class PostHandler {
             $newPost->user->avatar = $newUser['avatar'];
 
             //4.1 Pegar as informações de LIKE
-            $newPost->likes = 0;
-            $newPost->liked = false;
+            $likes = PostLike::select()->where('id_post', $postItem['id'])->get();
+
+            $newPost->likeCount = count($likes);
+            $newPost->liked = self::isLiked($postItem['id'], $loggedUserId);
 
             //4.2 Pegar os comentários
-            $newPost->comments = [];
+            $newPost->comments = PostComment::select()->where('id_post', $postItem['id'])->get();
+            foreach ($newPost->comments as $key => $comment) {
+                $newPost->comments[$key]['user'] = User::select('id, name, avatar')->where('id', $comment['id_user'])->one();
+            }
 
             $posts[] = $newPost;
         }
 
         return $posts;
+    }
+
+    public static function isLiked($id, $userId)
+    {
+        $myLike = PostLike::select()->where('id_post', $id)->where('id_user', $userId)->get();
+        /*
+        if (count($myLike) > 0) {
+            return true;
+        } else {
+            return false;
+        }*/
+        return (bool) count($myLike) > 0;
+    }
+
+    public static function addLike($idPost, $idUser)
+    {
+        PostLike::insert([
+            'id_post' => $idPost,
+            'id_user' => $idUser,
+            'created_at' => date('Y-m-d H:i:s')
+        ])->execute();
+    }
+
+    public static function deleteLike($idPost, $idUser)
+    {
+        PostLike::delete()->where('id_post', $idPost)->where('id_user', $idUser)->execute();
+    }
+
+    public static function addComment($id, $body, $idUser)
+    {
+        PostComment::insert([
+            'id_post' => $id,
+            'id_user' => $idUser,
+            'created_at' => date('Y-m-d H:i:s'),
+            'body' => $body
+        ])->execute();
     }
 
     public static function getUserFeed($idUser, $page, $loggedUserId)
