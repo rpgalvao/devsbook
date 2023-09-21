@@ -2,41 +2,8 @@
 <section class="container main">
     <?=$render('sidebar', ['activeMenu' => 'profile']);?>
     <section class="feed">
-        <div class="row">
-            <div class="box flex-1 border-top-flat">
-                <div class="box-body">
-                    <div class="profile-cover" style="background-image: url('<?=$base?>/media/covers/<?=$user->cover?>');"></div>
-                    <div class="profile-info m-20 row">
-                        <div class="profile-info-avatar">
-                            <img src="<?=$base?>/media/avatars/<?=$user->avatar?>" />
-                        </div>
-                        <div class="profile-info-name">
-                            <div class="profile-info-name-text"><?=$user->name?></div>
-                            <div class="profile-info-location"><?=$user->city?></div>
-                        </div>
-                        <div class="profile-info-data row">
-                            <?php if($user->id != $loggedUser->id): ?>
-                            <div class="profile-info-item m-width-20">
-                                <a class="button" href="<?=$base?>/perfil/<?=$user->id?>/follow"><?= (!$isFollowing) ? "Seguir" : "Deixar de seguir" ?></a>
-                            </div>
-                            <?php endif; ?>
-                            <div class="profile-info-item m-width-20">
-                                <div class="profile-info-item-n"><?=count($user->followers)?></div>
-                                <div class="profile-info-item-s">Seguidores</div>
-                            </div>
-                            <div class="profile-info-item m-width-20">
-                                <div class="profile-info-item-n"><?=count($user->followings)?></div>
-                                <div class="profile-info-item-s">Seguindo</div>
-                            </div>
-                            <div class="profile-info-item m-width-20">
-                                <div class="profile-info-item-n"><?=count($user->photos)?></div>
-                                <div class="profile-info-item-s">Fotos</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+        <?php $render('perfil-header', ['user' => $user, 'loggedUser' => $loggedUser, 'isFollowing' => $isFollowing]); ?>
 
         <div class="row">
             <div class="column side pr-5">
@@ -71,7 +38,7 @@
                             <span>(<?=count($user->followings)?>)</span>
                         </div>
                         <div class="box-header-buttons">
-                            <a href="">ver todos</a>
+                            <a href="<?=$base?>/perfil/<?=$user->id?>/amigos">ver todos</a>
                         </div>
                     </div>
                     <div class="box-body friend-list">
@@ -104,7 +71,7 @@
                             <span>(<?=count($user->photos)?>)</span>
                         </div>
                         <div class="box-header-buttons">
-                            <a href="">ver todos</a>
+                            <a href="<?=$base?>/perfil/<?=$user->id?>/fotos">ver todos</a>
                         </div>
                     </div>
                     <div class="box-body row m-20">

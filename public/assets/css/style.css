@@ -206,8 +206,6 @@ header .head-side {
     flex:none;
     width:250px;
 }
-
-
 .feed-new-editor {
     align-items: center;
 }
@@ -273,7 +271,7 @@ header .head-side {
     font-size:20px;
     margin-bottom:5px;
 }
-.profile-info-name-text a {
+.profile-info-name a{
     color:#000;
     text-decoration: none;
 }
@@ -300,7 +298,9 @@ header .head-side {
     font-size:14px;
     color:#999;
 }
-
+.profile-info-item a {
+    text-decoration: none;
+}
 .user-info-mini {
     display:flex;
     align-items: center;
@@ -390,6 +390,7 @@ header .head-side {
 }
 .full-user-photos .user-photo-item {
     margin:0;
+    max-width: 100%;
 }
 .feed-pagination a {
     display: inline-block;
@@ -419,6 +420,31 @@ header .head-side {
 }
 .button:hover {
     background-color:#477dbb;
+}
+.config-form{
+    margin-top: 10px;
+}
+.config-form label {
+    display: block;
+    padding: 10px 0;
+}
+.config-form input{
+    padding: 10px 15px;
+    font-size: 14px;
+    width: 100%;
+    max-width: 500px;
+}
+.config-form .image-edit{
+    max-width: 150px;
+}
+.flash {
+    border: 2px solid red;
+    background-color: red;
+    color: #FFFFFF;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    text-align: center;
 }
 
 @media (max-width: 992px) {

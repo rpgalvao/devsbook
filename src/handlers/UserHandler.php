@@ -17,6 +17,7 @@ class UserHandler {
                 $loggedUser->name = $data['name'];
                 $loggedUser->birthdate = $data['birthdate'];
                 $loggedUser->avatar = $data['avatar'];
+                $loggedUser->email = $data['email'];
 
                 return $loggedUser;
             }
@@ -71,6 +72,7 @@ class UserHandler {
         if ($data) {
             $user = new User();
             $user->id = $data['id'];
+            $user->email = $data['email'];
             $user->name = $data['name'];
             $user->birthdate = $data['birthdate'];
             $user->city = $data['city'];
@@ -138,5 +140,38 @@ class UserHandler {
     public static function unfollow($from, $to)
     {
         UserRelation::delete()->where('user_from', $from)->where('user_to', $to)->execute();
+    }
+
+    public static function searchUsers($term)
+    {
+        $users = [];
+        $data = User::select()->where('name', 'like', '%'.$term.'%')->get();
+        if ($data) {
+            foreach ($data as $user) {
+                $newUser = new User();
+                $newUser->id = $user['id'];
+                $newUser->name = $user['name'];
+                $newUser->avatar = $user['avatar'];
+
+                $users[] = $newUser;
+            }
+        }
+        return $users;
+    }
+
+    public static function updateUser($id, $name, $birthdate, $email, $city, $work, $password)
+    {
+        User::update()->set([
+            'name' => $name,
+            'birthdate' => $birthdate,
+            'email' => $email,
+            'city' => $city,
+            'work' => $work,
+        ])->where('id', $id)->execute();
+
+        if (!empty($password)) {
+            $pass = password_hash($password, PASSWORD_DEFAULT);
+            User::update()->set('password', $pass)->where('id', $id)->execute();
+        }
     }
 }
