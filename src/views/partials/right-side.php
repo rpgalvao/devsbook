@@ -6,8 +6,14 @@
         </div>
     </div>
     <div class="box-body">
-        <a href=""><img src="<?=$base?>/assets/images/php.png" /></a>
-        <a href=""><img src="<?=$base?>/assets/images/Laravel-10.jpg" /></a>
+        <a href="">
+            <img src="https://alunos.b7web.com.br/media/courses/php.jpg" alt="">
+<!--            <img src="--><?php //=$base?><!--/assets/images/php.png" />-->
+        </a>
+        <a href="">
+            <img src="https://alunos.b7web.com.br/media/courses/laravel.jpg" alt="">
+<!--            <img src="--><?php //=$base?><!--/assets/images/Laravel-10.jpg" />-->
+        </a>
     </div>
 </div>
 <div class="box">

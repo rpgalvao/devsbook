@@ -98,7 +98,7 @@ class PostHandler {
 
     public static function getUserFeed($idUser, $page, $loggedUserId)
     {
-        $perPage = 2;
+        $perPage = 3;
         $postList = Post::select()->where('id_user', $idUser)->orderBy('created_at', 'desc')->page($page, $perPage)->get();
 
         //2.1 Pegar o total de páginas para fazer a paginação
@@ -126,7 +126,7 @@ class PostHandler {
         $users[] = $idUser;
 
         //2. Pegar os posts desses usuários que eu sigo em ordem cronológica e com a quantidade de posts por página
-        $perPage = 2;
+        $perPage = 3;
         $postList = Post::select()->where('id_user', 'in', $users)->orderBy('created_at', 'desc')->page($page, $perPage)->get();
 
         //2.1 Pegar o total de páginas para fazer a paginação
@@ -157,5 +157,28 @@ class PostHandler {
         }
 
         return $photos;
+    }
+
+    public static function deletePost($idPost, $idUser)
+    {
+        // 1. Verificar se o post existe e é meu
+        $post = Post::select()->where('id', $idPost)->where('id_user', $idUser)->one();
+        if (count($post) > 0) {
+
+            // 2. Deletar os likes e comments desse post
+            PostLike::delete()->where('id_post', $idPost)->execute();
+            PostComment::delete()->where('id_post', $idPost)->execute();
+
+            // 3. Se o post for type == photo, deletar o arquivo
+            if ($post['type'] === 'photo') {
+                $img = __DIR__.'/../../public/media/uploads/'.$post['body'];
+                if (file_exists($img)) {
+                    unlink($img);
+                }
+            }
+
+            // 4. Deletar o post
+            Post::delete()->where('id', $idPost)->where('id_user', $idUser)->execute();
+        }
     }
 }

@@ -20,12 +20,26 @@
                 <br/>
                 <span class="fidi-date"><?=date('d/m/Y', strtotime($feedItem->created_at));?></span>
             </div>
-            <div class="feed-item-head-btn">
-                <img src="<?=$base?>/assets/images/more.png" />
-            </div>
+            <?php if ($feedItem->mine): ?>
+                <div class="feed-item-head-btn">
+                        <img src="<?=$base?>/assets/images/more.png" />
+                    <div class="feed-item-more-window">
+                        <a href="<?=$base?>/post/<?=$feedItem->id?>/apagar" onclick="return confirm('Deseja realmente apagar essa postagem?')">Excluir Post</a>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
         <div class="feed-item-body mt-10 m-width-20">
-            <?=nl2br($feedItem->body)?>
+            <?php
+                switch ($feedItem->type) {
+                    case 'text':
+                        echo nl2br($feedItem->body);
+                    break;
+                    case 'photo':
+                        echo '<img src="'.$base.'/media/uploads/'.$feedItem->body.'">';
+                    break;
+                }
+            ?>
         </div>
         <div class="feed-item-buttons row mt-20 m-width-20">
             <div class="like-btn <?=($feedItem->liked ? 'on' : '');?>"><?=$feedItem->likeCount?></div>
